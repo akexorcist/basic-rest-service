@@ -25,7 +25,7 @@ let users = [
   }
 ]
 
-app.listen(3333, () => console.log('Example app listening on port 3333!'))
+app.listen(3333, () => console.log('Basic RESTful Service listening on port 3333!'))
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -39,7 +39,7 @@ app.get('/api/v1/users', (req, res) => {
 
 app.get('/api/v1/users/:id', (req, res) => {
   let id = +req.params.id
-  let user = findUserById(id) || {} 
+  let user = findUserById(id) || {}
   res.send(user)
 })
 
@@ -59,7 +59,11 @@ app.post('/api/v1/users', (req, res) => {
     })
     return
   }
-  user.id = generateId()
+  let id = undefined
+  while (!id || findUserById(id)) {
+    id = generateId()
+  }
+  user.id = id
   users.push(user)
   res.send({
     message: 'User was added',
